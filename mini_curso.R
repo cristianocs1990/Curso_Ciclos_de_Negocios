@@ -1,15 +1,15 @@
 ###Decomposição do PIB Brasil via métodos de filtragem####
 
 ###Instalando os pacotes necessários para realizar o processo de decomposição
-install.packages(readxl) ##Pacote que permite a leitura de arquivos .xls e .xlsx
-install.packages(ggplot2) ##Pacote para construção de gráficos
-install.packages(mFilter) ##Pacote onde os filtros de extração de tendências e ciclos estão disponíveis
+install.packages("readxl") ##Pacote que permite a leitura de arquivos .xls e .xlsx
+install.packages("ggplot2") ##Pacote para construção de gráficos
+install.packages("mFilter") ##Pacote onde os filtros de extração de tendências e ciclos estão disponíveis
 
 ###Após instalar os pacotes, os mesmos ficam salvos na sua "biblioteca".
 ##Para usá-los é necessário informar ao R a sua intenção através do comando "library".
-library(readxl)
-library(ggplot2)
-library(mFilter)
+library("readxl")
+library("ggplot2")
+library("mFilter")
 
 ##Realizando a importação dos dados referentes ao PIB do Brasil, EUA, Reino Unido, Alemanha, Japão e México
 database <- read_excel("C:/Users/crist/Desktop/Mini Curso - Business Cycle/Dados/database.xlsx")
@@ -27,7 +27,7 @@ pib_mexico <- ts(pib_mex, start = c(1980,1), end = c(2014,3), frequency = 4)
 pib_reino_unido <- ts(pib_uk, start = c(1980,1), end = c(2014,3), frequency = 4)
 pib_eua <- ts(pib_usa, start = c(1980,1), end = c(2014,3), frequency = 4)
 
-##############################################################################
+p##############################################################################
 ##              Verificando se as séries são não estacionárias              ## 
 ##############################################################################
 
@@ -139,7 +139,7 @@ plot(ciclo_jap, main="Japão")
 ###Análise dos Ciclos de Negócios
 #Instalando e chamando na biblioteca o pacote pastec
 install.packages("pastecs")
-library(pastecs)
+library("pastecs")
 stat.desc(ciclo_bra[4:136], basic=TRUE, desc=TRUE, norm=TRUE)
 stat.desc(ciclo_usa[4:136], basic=TRUE, desc=TRUE, norm=TRUE)
 stat.desc(ciclo_mex[4:136], basic=TRUE, desc=TRUE, norm=TRUE)
@@ -193,7 +193,27 @@ plot(dat.mex, ciclo_mex, main="Datações e os Ciclos de Negócios do México")
 
 
 
+###############################################################################################
+#
+#                            Causalidade de Granger
+                           install.packages("lmtest")
+                                 library("lmtest")
+#
+##############################################################################################
 
+granger_bra_usa <- grangertest(ciclo_bra ~ ciclo_usa, order = 2)
+granger_bra_ale <- grangertest(ciclo_bra ~ ciclo_ale, order = 2)
+granger_bra_mex <- grangertest(ciclo_bra ~ ciclo_mex, order = 2)
+granger_bra_jap <- grangertest(ciclo_bra ~ ciclo_jap, order = 2)
+granger_bra_uk <- grangertest(ciclo_bra ~ ciclo_uk, order = 2)
+
+granger_ale_bra <- grangertest(ciclo_ale ~ ciclo_bra, order = 2)
+granger_jap_bra <- grangertest(ciclo_jap ~ ciclo_bra, order = 2)
+granger_mex_bra <- grangertest(ciclo_mex ~ ciclo_bra, order = 2)
+granger_uk_bra <- grangertest(ciclo_uk ~ ciclo_bra, order = 2)
+granger_usa_bra <- grangertest(ciclo_usa ~ ciclo_bra, order = 2)
+
+##############################################################################################
 
 
 
